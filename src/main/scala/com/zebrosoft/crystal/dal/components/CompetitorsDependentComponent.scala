@@ -13,8 +13,8 @@ trait CompetitorsDependentComponent extends TypedComponent
   import driver.api._
 
   trait CompetitorDependantColumns[B] extends Table[Entity] {
-    def competitorId = column[Long]("COMPETITOR_ID")
-    def date = column[LocalDate]("DATE")
+    def competitorId = column[Long]("competitor_id")
+    def date = column[LocalDate]("date")
   }
 
   override type EntityTable <: CompetitorDependantColumns[Entity]

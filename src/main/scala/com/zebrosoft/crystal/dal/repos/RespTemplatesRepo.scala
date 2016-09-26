@@ -24,15 +24,15 @@ trait RespTemplatesDao
   class RespTemplatesTable(tag: Tag) extends Table[ResponseTemplate](tag, tableName)
     with IdColumn[ResponseTemplate] {
 
-    def name = column[String]("NAME")
-    def text = column[String]("TEXT")
+    def name = column[String]("name")
+    def text = column[String]("text")
     override def * = (id.?, name, text) <> (ResponseTemplate.tupled, ResponseTemplate.unapply)
   }
 
   override type Entity = ResponseTemplate
   override type EntityTable = RespTemplatesTable
   override val table = TableQuery[RespTemplatesTable]
-  override val tableName = "RESTEMPLATES"
+  override val tableName = "restemplates"
 
   override def contains(entity: Entity): Future[Boolean] =
     db.run {

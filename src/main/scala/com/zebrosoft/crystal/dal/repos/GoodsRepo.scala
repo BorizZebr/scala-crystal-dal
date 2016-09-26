@@ -26,18 +26,18 @@ trait GoodsDao
     with IdColumn[Good]
     with CompetitorDependantColumns[Good] {
 
-    def extId = column[Long]("EXT_ID")
-    def name = column[String]("NAME")
-    def price = column[Double]("PRICE")
-    def imgUrl = column[String]("IMG_URL")
-    def url = column[String]("URL")
+    def extId = column[Long]("ext_id")
+    def name = column[String]("name")
+    def price = column[Double]("price")
+    def imgUrl = column[String]("img_url")
+    def url = column[String]("url")
     override def * = (id.?, competitorId.?, extId, name, price, imgUrl, url, date) <>(Good.tupled, Good.unapply)
   }
 
   override type Entity = Good
   override type EntityTable = GoodsTable
   override val table = TableQuery[GoodsTable]
-  override val tableName = "GOOD"
+  override val tableName = "good"
 
   override def getByCompetitor(competitorId: Long, skip: Int, take: Int): Future[Seq[Good]] =
     db.run(table

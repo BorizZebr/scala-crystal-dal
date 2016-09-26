@@ -24,12 +24,12 @@ trait CompetitorsDao extends CrudComponent { self: DalConfig =>
   class CompetitorsTable(tag: Tag) extends Table[Competitor](tag, tableName)
     with IdColumn[Competitor] {
 
-    def name = column[String]("NAME")
-    def url = column[String]("URL")
-    def lastCrawlStart = column[Option[DateTime]]("LAST_CRAWL_START")
-    def lastCrawlFinish = column[Option[DateTime]]("LAST_CRAWL_FINISH")
-    def crawledGoodsPages = column[Int]("CRAWLED_GOODS_PAGES")
-    def crawledReviewsPages = column[Int]("CRAWLED_REVIEWS_PAGES")
+    def name = column[String]("name")
+    def url = column[String]("url")
+    def lastCrawlStart = column[Option[DateTime]]("last_crawl_start")
+    def lastCrawlFinish = column[Option[DateTime]]("last_crawl_finish")
+    def crawledGoodsPages = column[Int]("crawled_goods_pages")
+    def crawledReviewsPages = column[Int]("crawled_reviews_pages")
     override def * = (id.?, name, url, lastCrawlStart, lastCrawlFinish, crawledGoodsPages, crawledReviewsPages) <>
       (Competitor.tupled, Competitor.unapply)
   }
@@ -37,7 +37,7 @@ trait CompetitorsDao extends CrudComponent { self: DalConfig =>
   override type Entity = Competitor
   override type EntityTable = CompetitorsTable
   override val table = TableQuery[CompetitorsTable]
-  override val tableName = "COMPETITOR"
+  override val tableName = "competitor"
 
   def getByUrl(url: String): Future[Option[Competitor]] =
     db.run(table.filter(_.url === url).result.headOption)
@@ -49,4 +49,19 @@ trait CompetitorsDao extends CrudComponent { self: DalConfig =>
           en.url === entity.url
       }.result.headOption
     }.map(_.isDefined)
+
+  def updateName(url: String, name: String) = {
+    getByUrl(url).map {
+      // in case of we already have this comp, check the name
+      // update if we need to
+      case Some(comInDb) => if (comInDb.name != name) {
+        val comToUpdate = comInDb.updateNameAndUrl(name, url)
+        update(comToUpdate)
+      }
+      // in case of none -- create in DB
+      case None =>
+        val comToCreate = Competitor(None, name, url, None, None, 0, 0)
+        insert(comToCreate)
+    }
+  }
 }

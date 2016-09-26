@@ -27,7 +27,7 @@ trait ChartsDao
     with IdColumn[Chart]
     with CompetitorDependantColumns[Chart] {
 
-    def amount = column[Int]("AMOUNT")
+    def amount = column[Int]("amount")
 
     override def * = (id.?, competitorId.?, amount, date) <>(Chart.tupled, Chart.unapply)
   }
@@ -35,7 +35,7 @@ trait ChartsDao
   override type EntityTable = ChartsTable
   override type Entity = Chart
   override val table: driver.api.TableQuery[EntityTable] = TableQuery[ChartsTable]
-  override val tableName = "CHART"
+  override val tableName = "chart"
 
   def getPoints(competitorId: Long, skip: Int, take: Int): Future[Seq[ChartPoint]] = {
     getByCompetitor(competitorId, skip, take).map {

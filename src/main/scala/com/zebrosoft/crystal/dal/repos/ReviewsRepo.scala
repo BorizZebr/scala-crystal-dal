@@ -26,15 +26,15 @@ trait ReviewsDao
     with IdColumn[Review]
     with CompetitorDependantColumns[Review] {
 
-    def author = column[String]("AUTHOR")
-    def text = column[String]("TEXT")
+    def author = column[String]("author")
+    def text = column[String]("text")
     override def * = (id.?, competitorId.?, author, text, date) <> (Review.tupled, Review.unapply)
   }
 
   override type Entity = Review
   override type EntityTable = ReviewsTable
   override val table = TableQuery[ReviewsTable]
-  override val tableName = "REVIEW"
+  override val tableName = "review"
 
   override def contains(entity: Review): Future[Boolean] =
     db.run {

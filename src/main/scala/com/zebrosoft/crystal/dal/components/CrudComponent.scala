@@ -11,7 +11,7 @@ trait CrudComponent extends TypedComponent { self: DalConfig =>
   import scala.concurrent.ExecutionContext.Implicits.global
 
   trait IdColumn[Entity] extends Table[Entity] {
-    def id = column[Long]("ID", O.PrimaryKey, O.AutoInc)
+    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   }
 
   override type EntityTable <: IdColumn[Entity]
